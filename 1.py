@@ -6,6 +6,24 @@ import asyncio
 import html
 import logging
 import time
+import os
+from threading import Thread
+from flask import Flask
+
+app = Flask('')
+
+@app.route('/')
+def home():
+    return "Bot 24/7 ishlayapti!"
+
+def run():
+    port = int(os.environ.get("PORT", 8080))
+    app.run(host='0.0.0.0', port=port)
+
+def keep_alive():
+    t = Thread(target=run)
+    t.start()
+
 
 import aiosqlite
 from aiogram import Bot, Dispatcher, F, Router
@@ -542,3 +560,6 @@ async def reminder_loop(bot: Bot):
 async def main():
     logging.basicConfig(level=logging.INFO)
     await init_db() 
+if __name__ == "__main__":
+    keep_alive()
+    asyncio.run(main())
